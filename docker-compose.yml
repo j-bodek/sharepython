@@ -8,6 +8,7 @@ services:
       - "8080:8080"
     volumes:
       - "./frontend/src:/src"
+      - "/src/node_modules"
     depends_on:
       - api
   api:
@@ -36,11 +37,14 @@ services:
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=devpass
+      - DATABASE_PORT=5432
     # wait till db service start
     depends_on:
       - db
   db:
     image: postgres:13-alpine
+    ports:
+      - "5432:5432"
     volumes:
       - dev-db-data:/var/lib/postgres/data
     # initial environment variables
