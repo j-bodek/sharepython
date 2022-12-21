@@ -38,9 +38,14 @@ services:
       - DB_USER=devuser
       - DB_PASS=devpass
       - DATABASE_PORT=5432
+      # redis env variables
+      - REDIS_HOST=redis_db
+      - REDIS_PORT=6379
+      - REDIS_PASS=dev_redispass
     # wait till db service start
     depends_on:
       - db
+      - redis_db
   db:
     image: postgres:13-alpine
     ports:
@@ -52,6 +57,17 @@ services:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=devpass
+  redis_db:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass dev_redispass
+    volumes:
+      - redis-db-data:/var/lib/redis/data
 
 volumes:
   dev-db-data:
+    driver: local
+  redis-db-data:
+    driver: local
