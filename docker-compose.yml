@@ -1,4 +1,4 @@
-version: "3.10"
+version: "3.11"
 
 services:
   frontend:
@@ -46,6 +46,29 @@ services:
     depends_on:
       - db
       - redis_db
+  websocket_server:
+    build:
+      # path to directory containing Dockerfile
+      context: ./websocket_server
+      args:
+        # set DEV argument to true
+        - DEV=true
+    # map local port 8888 to port 8888 in container
+    ports:
+      - "8888:8888"
+    # map directory from system to docker container
+    volumes:
+      - "./websocket_server/src:/src"
+    # commands run from container
+    command: watchmedo auto-restart --pattern "*.py" --recursive --signal SIGTERM -- python -u main.py
+    # define environmental variables
+    environment:
+      # redis env variables
+      - REDIS_HOST=redis_db
+      - REDIS_PORT=6379
+      - REDIS_PASS=dev_redispass
+    depends_on:
+      - api
   db:
     image: postgres:13-alpine
     ports:
