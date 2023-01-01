@@ -17,6 +17,10 @@ def main():
     services = [
         ("https://github.com/LilJack118/sharepython-frontend.git", "frontend"),
         ("https://github.com/LilJack118/sharepython-api.git", "api"),
+        (
+            "https://github.com/LilJack118/sharepython-websocket-server.git",
+            "websocket_server",
+        ),
     ]
 
     def git(*args):
