@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "./frontend/src:/src"
+      - "./frontend/src:/frontend/src"
       - "/src/node_modules"
     depends_on:
       - api
@@ -46,29 +46,64 @@ services:
     depends_on:
       - db
       - redis_db
-  websocket_server:
+  websocket_server_1:
     build:
       # path to directory containing Dockerfile
       context: ./websocket_server
       args:
         # set DEV argument to true
         - DEV=true
-    # map local port 8888 to port 8888 in container
-    ports:
-      - "8888:8888"
     # map directory from system to docker container
     volumes:
       - "./websocket_server/src:/src"
     # commands run from container
-    command: watchmedo auto-restart --pattern "*.py" --recursive --signal SIGTERM -- python -u main.py
+    command: watchmedo auto-restart --pattern "*.py" --recursive --signal SIGTERM -- sanic main.app --host 0.0.0.0 --port 8888
     # define environmental variables
     environment:
+      # define port without exposing it. Only haproxy should have direct access to it
+      - PORT=8888
       # redis env variables
       - REDIS_HOST=redis_db
       - REDIS_PORT=6379
       - REDIS_PASS=dev_redispass
     depends_on:
       - api
+  websocket_server_2:
+    build:
+      # path to directory containing Dockerfile
+      context: ./websocket_server
+      args:
+        # set DEV argument to true
+        - DEV=true
+    # map directory from system to docker container
+    volumes:
+      - "./websocket_server/src:/src"
+    # commands run from container
+    command: watchmedo auto-restart --pattern "*.py" --recursive --signal SIGTERM -- sanic main.app --host 0.0.0.0 --port 8888
+    # define environmental variables
+    environment:
+      - PORT=8888
+      # redis env variables
+      - REDIS_HOST=redis_db
+      - REDIS_PORT=6379
+      - REDIS_PASS=dev_redispass
+    depends_on:
+      - api
+  loadbalancer:
+    image: haproxy:1.8
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    links:
+      - websocket_server_1
+      - websocket_server_2
+    deploy:
+      resources:
+        # set memory limit
+        limits:
+          memory: 500M
   db:
     image: postgres:13-alpine
     ports:
