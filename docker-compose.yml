@@ -8,6 +8,7 @@ services:
       - "8080:8080"
     volumes:
       - "./frontend/src:/frontend/src"
+      - "./frontend/public:/frontend/public"
       - "/src/node_modules"
     depends_on:
       - api
@@ -42,11 +43,31 @@ services:
       - REDIS_HOST=redis_db
       - REDIS_PORT=6379
       - REDIS_PASS=dev_redispass
+      # celery env variables
+      - CELERY_BROAKER_URL=redis://redis_db:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis_db:6379
     # wait till db service start
     depends_on:
       - db
       - redis_db
-  websocket_server_1:
+  # celery worker will execute async to take load from python api
+  celery_worker:
+    build:
+      context: ./api
+      args:
+        # set DEV argument to true
+        - DEV=true
+    # map directory from system to docker container
+    volumes:
+      - "./api/src:/src"
+    command: celery -A src worker -l info
+    environment:
+      - CELERY_BROKER_URL=redis://:dev_redispass@redis_db:6379/0
+      - CELERY_RESULT_BACKEND=redis://:dev_redispass@redis_db:6379
+    depends_on:
+      - db
+      - redis_db
+  websocket_server:
     build:
       # path to directory containing Dockerfile
       context: ./websocket_server
@@ -66,27 +87,8 @@ services:
       - REDIS_HOST=redis_db
       - REDIS_PORT=6379
       - REDIS_PASS=dev_redispass
-    depends_on:
-      - api
-  websocket_server_2:
-    build:
-      # path to directory containing Dockerfile
-      context: ./websocket_server
-      args:
-        # set DEV argument to true
-        - DEV=true
-    # map directory from system to docker container
-    volumes:
-      - "./websocket_server/src:/src"
-    # commands run from container
-    command: watchmedo auto-restart --pattern "*.py" --recursive --signal SIGTERM -- sanic main.app --host 0.0.0.0 --port 8888
-    # define environmental variables
-    environment:
-      - PORT=8888
-      # redis env variables
-      - REDIS_HOST=redis_db
-      - REDIS_PORT=6379
-      - REDIS_PASS=dev_redispass
+      - TMP_CODESPACE_EXPIRE_UPDATE=1200
+      - CODESPACE_EXPIRE_UPDATE=1200
     depends_on:
       - api
   loadbalancer:
@@ -96,9 +98,10 @@ services:
       - "8888:8888"
     volumes:
       - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    depends_on:
+      - websocket_server
     links:
-      - websocket_server_1
-      - websocket_server_2
+      - websocket_server
     deploy:
       resources:
         # set memory limit
@@ -120,7 +123,7 @@ services:
     restart: always
     ports:
       - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass dev_redispass
+    command: redis-server --save 20 1 --loglevel warning --requirepass dev_redispass --notify-keyspace-events Kx
     volumes:
       - redis-db-data:/var/lib/redis/data
 
