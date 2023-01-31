@@ -32,26 +32,13 @@ services:
               python manage.py migrate &&
               python manage.py runserver 0.0.0.0:8000
       "
-    # define environmental variables
-    environment:
-      - DB_HOST=db
-      - DB_NAME=devdb
-      - DB_USER=devuser
-      - DB_PASS=devpass
-      - DATABASE_PORT=5432
-      # redis env variables
-      - REDIS_HOST=redis_db
-      - REDIS_PORT=6379
-      - REDIS_PASS=dev_redispass
-      # celery env variables
-      - CELERY_BROAKER_URL=redis://redis_db:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis_db:6379
     # wait till db service start
     depends_on:
       - db
       - redis_db
   # celery worker will execute async to take load from python api
   celery_worker:
+    restart: always
     build:
       context: ./api
       args:
@@ -60,13 +47,11 @@ services:
     # map directory from system to docker container
     volumes:
       - "./api/src:/src"
-    command: celery -A src worker -l info
-    environment:
-      - CELERY_BROKER_URL=redis://:dev_redispass@redis_db:6379/0
-      - CELERY_RESULT_BACKEND=redis://:dev_redispass@redis_db:6379
+    command: celery -A src worker -l INFO
     depends_on:
       - db
       - redis_db
+      - api
   websocket_server:
     build:
       # path to directory containing Dockerfile
