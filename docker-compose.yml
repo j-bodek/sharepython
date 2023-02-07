@@ -32,6 +32,23 @@ services:
               python manage.py migrate &&
               python manage.py runserver 0.0.0.0:8000
       "
+    # uncomment this if you don't want to define .env file
+    # environment:
+    #   - DB_HOST=db
+    #   - DB_NAME=devdb
+    #   - DB_USER=devuser
+    #   - DB_PASS=devpass
+    #   - DATABASE_PORT=5432
+    #   # redis env variables
+    #   - REDIS_HOST=redis_db
+    #   - REDIS_PORT=6379
+    #   - REDIS_PASS=dev_redispass
+    #   # celery env variables
+    #   - CELERY_BROKER_URL=redis://:dev_redispass@redis_db:6379
+    #   - CELERY_RESULT_BACKEND=redis://:dev_redispass@redis_db:6379
+    # email settings
+    # EMAIL_HOST_USER=YOUR_HOST
+    # EMAIL_HOST_PASSWORD=YOUR_PWD
     # wait till db service start
     depends_on:
       - db
@@ -48,6 +65,23 @@ services:
     volumes:
       - "./api/src:/src"
     command: celery -A src worker -l INFO
+    # uncomment this if you don't want to define .env file
+    # environment:
+    #   - DB_HOST=db
+    #   - DB_NAME=devdb
+    #   - DB_USER=devuser
+    #   - DB_PASS=devpass
+    #   - DATABASE_PORT=5432
+    #   # redis env variables
+    #   - REDIS_HOST=redis_db
+    #   - REDIS_PORT=6379
+    #   - REDIS_PASS=dev_redispass
+    #   # celery env variables
+    #   - CELERY_BROKER_URL=redis://:dev_redispass@redis_db:6379
+    #   - CELERY_RESULT_BACKEND=redis://:dev_redispass@redis_db:6379
+    # email settings
+    # EMAIL_HOST_USER=YOUR_HOST
+    # EMAIL_HOST_PASSWORD=YOUR_PWD
     depends_on:
       - db
       - redis_db
