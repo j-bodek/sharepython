@@ -1,6 +1,8 @@
 # SharePython.io
 Fully open source full stack platform, written in microservices architecture for sharing and executing python code from your browser (heavily inspired by [**codeshare.io**](https://codeshare.io/ "codeshare.io")). 
 
+![sharepython_gif](images/sharepython.gif)
+
 Stack:
 - Django
 - Django Rest Framework
