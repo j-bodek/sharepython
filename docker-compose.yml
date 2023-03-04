@@ -12,6 +12,7 @@ services:
       - "/src/node_modules"
     environment:
       - VUE_APP_BASE_API_URL=http://0.0.0.0:8000/api/
+      - VUE_APP_BASE_WS_URL=ws://0.0.0.0:8888/
     depends_on:
       - api
   api:
@@ -48,9 +49,20 @@ services:
     #   # celery env variables
     #   - CELERY_BROKER_URL=redis://:dev_redispass@redis_db:6379
     #   - CELERY_RESULT_BACKEND=redis://:dev_redispass@redis_db:6379
-    # email settings
-    # EMAIL_HOST_USER=YOUR_HOST
-    # EMAIL_HOST_PASSWORD=YOUR_PWD
+    #   # email settings
+    #   - EMAIL_HOST_USER=YOUR_HOST
+    #   - EMAIL_HOST_PASSWORD=YOUR_PWD
+    #   # project settings
+    #   - BASE_URL=http://someurl/
+    #   - DEBUG=True
+    #   - ALLOWED_HOSTS="host1,host2"
+    #   - SECRET_KEY=YOUR_SECRET_KEY
+    #   - CORS_ORIGIN_WHITELIST="host1,host2"
+    #   - CORS_ALLOWED_ORIGINS="host1,host2"
+    #   - CSRF_TRUSTED_ORIGINS="host1,host2"
+    #   - CODESPACE_REDIS_EXPIRE_TIME=1200
+    #   - TMP_CODESPACE_REDIS_EXPIRE_TIME=1200
+
     # wait till db service start
     depends_on:
       - db
@@ -81,9 +93,19 @@ services:
     #   # celery env variables
     #   - CELERY_BROKER_URL=redis://:dev_redispass@redis_db:6379
     #   - CELERY_RESULT_BACKEND=redis://:dev_redispass@redis_db:6379
-    # email settings
-    # EMAIL_HOST_USER=YOUR_HOST
-    # EMAIL_HOST_PASSWORD=YOUR_PWD
+    #   # email settings
+    #   - EMAIL_HOST_USER=YOUR_HOST
+    #   - EMAIL_HOST_PASSWORD=YOUR_PWD
+    #   # project settings
+    #   - BASE_URL=http://someurl/
+    #   - DEBUG=True
+    #   - ALLOWED_HOSTS="host1,host2"
+    #   - SECRET_KEY=YOUR_SECRET_KEY
+    #   - CORS_ORIGIN_WHITELIST="host1,host2"
+    #   - CORS_ALLOWED_ORIGINS="host1,host2"
+    #   - CSRF_TRUSTED_ORIGINS="host1,host2"
+    #   - CODESPACE_REDIS_EXPIRE_TIME=1200
+    #   - TMP_CODESPACE_REDIS_EXPIRE_TIME=1200
     depends_on:
       - db
       - redis_db
