@@ -3,6 +3,9 @@ api/
 frontend/
 websocket_server/
 
+# k8s configmaps
+k8s/config_maps/
+
 # Django #
 *.log
 *.pot

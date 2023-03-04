@@ -10,6 +10,8 @@ services:
       - "./frontend/src:/frontend/src"
       - "./frontend/public:/frontend/public"
       - "/src/node_modules"
+    environment:
+      - VUE_APP_BASE_API_URL=http://0.0.0.0:8000/api/
     depends_on:
       - api
   api:
@@ -143,11 +145,7 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass dev_redispass --notify-keyspace-events Kx
-    volumes:
-      - redis-db-data:/var/lib/redis/data
 
 volumes:
   dev-db-data:
-    driver: local
-  redis-db-data:
     driver: local
