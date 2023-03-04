@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sharepython-celery-deployment
+  labels:
+    app: sharepython-celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sharepython-celery
+  template:
+    metadata:
+      labels:
+        app: sharepython-celery
+    spec:
+      containers:
+        - name: sharepython-celery
+          image: sharepython-api:v.02
+          command: ["sh", "-c"]
+          args: [
+              "
+              celery -A src worker -l INFO
+              ",
+            ]
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: sharepython-api-config

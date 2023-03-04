@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sharepython-websocket-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: sharepython-websocket
+  ports:
+    - name: sharepython-websocket-service-port
+      protocol: TCP
+      port: 8888
+      targetPort: 8888

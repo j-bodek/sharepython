@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sharepython-frontend-deployment
+  labels:
+    app: sharepython-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sharepython-frontend
+  template:
+    metadata:
+      labels:
+        app: sharepython-frontend
+    spec:
+      containers:
+        - name: sharepython-frontend
+          image: sharepython-frontend:v.04
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: sharepython-frontend-config
