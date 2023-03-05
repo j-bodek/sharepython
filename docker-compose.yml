@@ -126,6 +126,7 @@ services:
     environment:
       # define port without exposing it. Only haproxy should have direct access to it
       - PORT=8888
+      - API_BASE_URL=http://api:8000/api/
       # redis env variables
       - REDIS_HOST=redis_db
       - REDIS_PORT=6379
