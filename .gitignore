@@ -5,6 +5,7 @@ websocket_server/
 
 # k8s configmaps
 k8s/config_maps/
+k8s/secrets/
 
 # Django #
 *.log
