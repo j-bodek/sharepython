@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: sharepython-api-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: sharepython-api
   ports:
@@ -11,4 +11,3 @@ spec:
       protocol: TCP
       port: 8000
       targetPort: 8000
-      nodePort: 30009

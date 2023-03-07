@@ -3,12 +3,11 @@ kind: Service
 metadata:
   name: sharepython-frontend-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: sharepython-frontend
   ports:
     - name: sharepython-frontend-service-port
       protocol: TCP
       port: 8080
-      targetPort: 8080
-      nodePort: 30008
+      targetPort: 80

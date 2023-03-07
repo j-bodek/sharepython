@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
         - name: sharepython-frontend
-          image: sharepython-frontend:v.04
+          image: liljack118/sharepython-frontend:latest
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
                 name: sharepython-frontend-config
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: dockerhub-cred

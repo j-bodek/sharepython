@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: sharepython-api
-          image: sharepython-api:v.02
+          image: liljack118/sharepython-api:latest
           command: ["sh", "-c"]
           args: [
               "
@@ -30,3 +30,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: sharepython-api-config
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: dockerhub-cred
