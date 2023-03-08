@@ -17,13 +17,11 @@ spec:
       containers:
         - name: sharepython-api
           image: liljack118/sharepython-api:latest
+          tty: true
           command: ["sh", "-c"]
-          args: [
-              "
-              python manage.py wait_for_db &&
-              python manage.py migrate &&
-              python manage.py runserver 0.0.0.0:8000
-              ",
+          args:
+            [
+              "python manage.py wait_for_db && python manage.py migrate && python manage.py runserver 0.0.0.0:8000",
             ]
           ports:
             - containerPort: 8000

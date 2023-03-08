@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sharepython-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: sharepython-frontend-ip
+spec:
+  rules:
+    - host: "sharepython.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: sharepython-frontend-service
+                port:
+                  number: 8080
+    - host: "api.sharepython.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: sharepython-api-service
+                port:
+                  number: 8000

@@ -11,7 +11,7 @@ services:
       - "./frontend/public:/frontend/public"
       - "/src/node_modules"
     environment:
-      - VUE_APP_BASE_API_URL=http://0.0.0.0:8000/api/
+      - VUE_APP_BASE_API_URL=http://0.0.0.0:8000/
       - VUE_APP_BASE_WS_URL=ws://0.0.0.0:8888/
     depends_on:
       - api
@@ -128,7 +128,7 @@ services:
     environment:
       # define port without exposing it. Only haproxy should have direct access to it
       - PORT=8888
-      - API_BASE_URL=http://api:8000/api/
+      - API_BASE_URL=http://api:8000/
       # redis env variables
       - REDIS_HOST=redis_db
       - REDIS_PORT=6379

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: sharepython-api-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: sharepython-api
   ports:
