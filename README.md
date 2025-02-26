@@ -25,7 +25,7 @@ Make sure you have docker installed before you start
 git clone https://github.com/LilJack118/sharepython.git
 ```
 
-#### 2. Clone microservices repositories
+#### 2. Clone microservices repositories (if not already cloned)
 ```python
 python3 clone.py
 ```
